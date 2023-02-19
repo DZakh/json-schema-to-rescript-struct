@@ -6,10 +6,7 @@ describe("jsonSchemaToZod", () => {
       jsonSchemaToZod({
         type: "string",
       })
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.string();
-`);
+    ).toStrictEqual(`let struct = z.string()`);
   });
 
   it("should include defaults", () => {
@@ -18,10 +15,7 @@ export default z.string();
         type: "string",
         default: "foo",
       })
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.string().default("foo");
-`);
+    ).toStrictEqual(`let struct = z.string().default("foo")`);
   });
 
   it("should include falsy defaults", () => {
@@ -30,10 +24,7 @@ export default z.string().default("foo");
         type: "string",
         default: "",
       })
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.string().default("");
-`);
+    ).toStrictEqual(`let struct = z.string().default("")`);
   });
 
   it("should include falsy defaults", () => {
@@ -42,10 +33,7 @@ export default z.string().default("");
         type: "string",
         const: "",
       })
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.literal("");
-`);
+    ).toStrictEqual(`let struct = z.literal("")`);
   });
 
   it("can exclude defaults", () => {
@@ -59,10 +47,7 @@ export default z.literal("");
         true,
         true
       )
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.string();
-`);
+    ).toStrictEqual(`let struct = z.string()`);
   });
 
   it("will remove optionality if default is present", () => {
@@ -76,10 +61,9 @@ export default z.string();
           },
         },
       })
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.object({ prop: z.string().default("def") });
-`);
+    ).toStrictEqual(
+      `let struct = z.object({"prop":z.string().default("def")})`
+    );
   });
 
   it("will handle falsy defaults", () => {
@@ -88,10 +72,7 @@ export default z.object({ prop: z.string().default("def") });
         type: "boolean",
         default: false,
       })
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.boolean().default(false);
-`);
+    ).toStrictEqual(`let struct = z.boolean().default(false)`);
   });
 
   it("will ignore undefined as default", () => {
@@ -100,9 +81,6 @@ export default z.boolean().default(false);
         type: "null",
         default: undefined,
       })
-    ).toStrictEqual(`import { z } from "zod";
-
-export default z.null();
-`);
+    ).toStrictEqual(`let struct = z.null()`);
   });
 });

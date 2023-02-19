@@ -1,6 +1,5 @@
 import { JSONSchema7 } from "json-schema";
 import { parseSchema } from "./parsers/parseSchema";
-import { format } from "./utils/format";
 import $RefParser from "@apidevtools/json-schema-ref-parser";
 
 export const jsonSchemaToZodDereffed = (
@@ -20,9 +19,7 @@ export const jsonSchemaToZod = (
   name?: string,
   module = true,
   withoutDefaults = false
-): string =>
-  format(
-    `${module ? `import {z} from 'zod'\n\nexport ` : ""}${
-      name ? `const ${name}=` : module ? "default " : "const schema="
-    }${parseSchema(schema, withoutDefaults)}`
-  );
+): string => {
+  const struct = parseSchema(schema, withoutDefaults);
+  return `let struct = ${struct}`;
+};
